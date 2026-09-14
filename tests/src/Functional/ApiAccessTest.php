@@ -6,6 +6,7 @@ namespace Drupal\Tests\mave\Functional;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\media\Entity\Media;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\BrowserTestBase;
 use PHPUnit\Framework\Attributes\Group;
@@ -36,6 +37,26 @@ final class ApiAccessTest extends BrowserTestBase {
     self::assertSame('mave_picker', EntityFormDisplay::load('media.mave_video.default')->getComponent('field_mave_id')['type']);
     self::assertSame('mave_player', EntityViewDisplay::load('media.mave_video.default')->getComponent('field_mave_id')['type']);
     self::assertArrayNotHasKey('api_key', $this->config('mave.settings')->getRawData());
+  }
+
+  /**
+   * Tests cached media plugins reconnect their services after serialization.
+   */
+  public function testMediaPluginsSurviveSerialization(): void {
+    $media = Media::create([
+      'bundle' => 'mave_video',
+      'field_mave_id' => 'abcdefghijklmno',
+    ]);
+    $source = unserialize(serialize(MediaType::load('mave_video')->getSource()));
+    // Without an API key the source falls back to the ID, without a request.
+    self::assertSame('abcdefghijklmno', $source->getMetadata($media, 'default_name'));
+
+    $display = EntityViewDisplay::load('media.mave_video.default');
+    $formatter = unserialize(serialize($display->getRenderer('field_mave_id')));
+    $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+    self::assertSame('abcdefghijklmno', $elements[0]['#embed_id']);
+    self::assertSame(['mave/player'], $elements[0]['#attached']['library']);
+    self::assertArrayNotHasKey('api_key', $elements[0]['#attached']['drupalSettings']['mave']);
   }
 
   /**

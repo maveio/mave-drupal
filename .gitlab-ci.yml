@@ -12,10 +12,23 @@ variables:
   OPT_IN_TEST_NEXT_MINOR: '1'
   _PHPUNIT_CONCURRENT: '0'
   _PHPUNIT_EXTRA: '--fail-on-warning --fail-on-deprecation --fail-on-skipped'
+  _CSPELL_DICTIONARY: '.cspell-project-words.txt'
 
 # Keep these release checks blocking even if template defaults change.
 phpunit:
   allow_failure: false
 
 phpcs:
+  allow_failure: false
+
+phpstan:
+  allow_failure: false
+
+eslint:
+  allow_failure: false
+
+stylelint:
+  allow_failure: false
+
+cspell:
   allow_failure: false

@@ -6,10 +6,10 @@ repository: `mave.info.yml`, `mave.module`, `mave.install`, `composer.json`,
 The surrounding OrbStack workspace, `.local/`, site volumes, recordings and
 SaaS connection scripts are development infrastructure and must not be published.
 
-The proposed machine name is `mave`, with Composer name `drupal/mave` and package
-type `drupal-module`. The Drupal.org project name has not been reserved or its
-availability verified. Resolve that before publishing; a different machine name
-requires consistently renaming the module, namespaces, hooks and configuration.
+The project is [Mave Video](https://www.drupal.org/project/mave), with machine
+name `mave`, Composer name `drupal/mave` and package type `drupal-module`.
+Its Drupal repository is `git@git.drupal.org:project/mave.git`; GitHub remains
+at `https://github.com/maveio/mave-drupal`.
 
 ## First public release
 
@@ -26,13 +26,14 @@ requires consistently renaming the module, namespaces, hooks and configuration.
    such as `1.0.x`. Keep both repositories on the same reviewed source. The
    included GitLab CI file uses Drupal's official templates.
 3. Let the hosted pipeline complete and resolve its failures. Test on a clean
-   Drupal site and verify browse, upload, editor preview and anonymous playback
-   against the intended production Mave endpoints and a pinned component build.
-   Also check slow/failing services and window resizing in a separate browser.
-   In the release commit, replace the README's Git clone command with
-   `composer require drupal/mave:^1.0@beta`, using the confirmed project name.
-   Keep source checkout instructions in CONTRIBUTING.md. Publish that commit
-   to both repositories so their installation instructions match the release.
+   Drupal site, including browse, upload, editor preview and anonymous playback.
+   Check slow/failing services and window resizing in a separate browser. Record
+   the tested Drupal/PHP versions, service environment and browser-component
+   version in the release notes. Identify any integration checks still pending
+   in a beta. Before a stable release, verify the complete workflow against the
+   intended production Mave endpoints with a pinned component build.
+   Keep Composer installation in the README and source checkout instructions in
+   CONTRIBUTING.md. Publish the same release commit to both repositories.
 4. Start with a pre-release such as `1.0.0-beta1`. After tagging, create its
    release on the project page. Drupal generates the downloads and Composer
    distribution. Do not hard-code `version`, `project` or `datestamp` into

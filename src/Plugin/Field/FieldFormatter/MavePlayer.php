@@ -10,12 +10,27 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\mave\MaveClient;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Renders a Mave player for a video reference.
  */
 #[FieldFormatter(id: 'mave_player', label: new TranslatableMarkup('Mave player'), field_types: ['string'])]
 final class MavePlayer extends FormatterBase {
+
+  /**
+   * The Mave connection and public player settings.
+   */
+  protected MaveClient $client;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->client = $container->get('mave.client');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -59,8 +74,7 @@ final class MavePlayer extends FormatterBase {
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
-    $client = \Drupal::service('mave.client');
-    $settings = $client->settings();
+    $settings = $this->client->settings();
     $elements = [];
     foreach ($items as $delta => $item) {
       if (!MaveClient::validEmbedId((string) $item->value)) {
@@ -74,7 +88,7 @@ final class MavePlayer extends FormatterBase {
         '#embed_id' => $item->value,
         '#player_theme' => $theme,
         '#color' => $color,
-        '#attached' => ['library' => ['mave/player'], 'drupalSettings' => ['mave' => $client->publicSettings()]],
+        '#attached' => ['library' => ['mave/player'], 'drupalSettings' => ['mave' => $this->client->publicSettings()]],
         '#cache' => ['tags' => ['config:mave.settings']],
       ];
     }

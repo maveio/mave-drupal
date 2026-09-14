@@ -7,12 +7,34 @@ namespace Drupal\mave\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\State\StateInterface;
 use Drupal\mave\MaveClient;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Configures the Mave connection and default player appearance.
  */
 final class SettingsForm extends ConfigFormBase {
+
+  /**
+   * The authenticated Mave API client.
+   */
+  protected MaveClient $client;
+
+  /**
+   * The state storage for credentials excluded from configuration exports.
+   */
+  protected StateInterface $state;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->client = $container->get('mave.client');
+    $instance->state = $container->get('state');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -32,12 +54,11 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $config = \Drupal::config('mave.settings');
-    $client = \Drupal::service('mave.client');
+    $config = $this->configFactory()->get('mave.settings');
     $form['connection'] = [
       '#type' => 'item',
       '#title' => $this->t('Connection'),
-      '#plain_text' => $client->apiKey() ? $this->t('An API key is configured.') : $this->t('No API key configured.'),
+      '#plain_text' => $this->client->apiKey() ? $this->t('An API key is configured.') : $this->t('No API key configured.'),
     ];
     $form['api_key'] = [
       '#type' => 'password',
@@ -135,7 +156,7 @@ final class SettingsForm extends ConfigFormBase {
     }
     $config->save();
     if (Settings::get('mave_api_key') === NULL && ($key = trim($form_state->getValue('api_key')))) {
-      \Drupal::state()->set('mave.api_key', MaveClient::normalizeKey($key));
+      $this->state->set('mave.api_key', MaveClient::normalizeKey($key));
     }
     parent::submitForm($form, $form_state);
   }

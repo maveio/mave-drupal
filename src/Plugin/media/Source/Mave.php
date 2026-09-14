@@ -30,12 +30,12 @@ final class Mave extends MediaSourceBase {
   /**
    * The authenticated Mave API client.
    */
-  private MaveClient $client;
+  protected MaveClient $client;
 
   /**
    * The local thumbnail cache.
    */
-  private ThumbnailStore $thumbnails;
+  protected ThumbnailStore $thumbnails;
 
   /**
    * {@inheritdoc}

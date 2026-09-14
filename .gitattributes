@@ -4,4 +4,6 @@
 /.github export-ignore
 /.gitignore export-ignore
 /.gitlab-ci.yml export-ignore
+/.cspell-project-words.txt export-ignore
+/.prettierrc.json export-ignore
 /tests export-ignore

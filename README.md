@@ -43,7 +43,7 @@ The module enables its core Media, Media Library and CKEditor 5 dependencies.
 From your Drupal project's root directory:
 
 ```sh
-git clone https://github.com/maveio/mave-drupal.git web/modules/custom/mave
+composer require 'drupal/mave:^1.0@beta'
 drush en mave -y
 drush cr
 ```
