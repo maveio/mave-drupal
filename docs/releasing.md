@@ -29,13 +29,19 @@ requires consistently renaming the module, namespaces, hooks and configuration.
    Drupal site and verify browse, upload, editor preview and anonymous playback
    against the intended production Mave endpoints and a pinned component build.
    Also check slow/failing services and window resizing in a separate browser.
+   In the release commit, replace the README's Git clone command with
+   `composer require drupal/mave:^1.0@beta`, using the confirmed project name.
+   Keep source checkout instructions in CONTRIBUTING.md. Publish that commit
+   to both repositories so their installation instructions match the release.
 4. Start with a pre-release such as `1.0.0-beta1`. After tagging, create its
    release on the project page. Drupal generates the downloads and Composer
    distribution. Do not hard-code `version`, `project` or `datestamp` into
    `mave.info.yml`; Drupal's packaging adds release metadata.
-5. Once a release exists under that name, document installation with
-   `composer require drupal/mave:^1.0@beta` (and remove `@beta` for a stable
-   release). That command is not available before the project is published.
+5. Verify the published version resolves from
+   `https://packages.drupal.org/8` in a clean Drupal project. A Git tag alone
+   does not publish the Composer package; complete the Drupal.org release form
+   and wait for its generated downloads and package metadata. Remove `@beta`
+   from the README's installation command when publishing a stable release.
 
 The automated tests currently cover install-time media configuration, route
 permissions and CSRF, key isolation, API validation and errors, JWT generation,

@@ -40,8 +40,7 @@ Videos stay in Mave; Drupal stores the references you choose for your content.
 Requires Drupal 11, PHP 8.3 or newer, and a Mave installation with an API key.
 The module enables its core Media, Media Library and CKEditor 5 dependencies.
 
-Until a Drupal.org release is available, place this directory at
-`web/modules/custom/mave`, then run:
+From your Drupal project's root directory:
 
 ```sh
 git clone https://github.com/maveio/mave-drupal.git web/modules/custom/mave

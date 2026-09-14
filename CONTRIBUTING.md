@@ -4,6 +4,15 @@ Keep changes focused and add regression tests for changes to permissions,
 credentials, API handling, uploads or library navigation. Use synthetic data;
 never commit API keys, signed upload URLs, local settings or customer media.
 
+To work on the source, clone it from your Drupal project's root directory:
+
+```sh
+git clone https://github.com/maveio/mave-drupal.git web/modules/custom/mave
+```
+
+If this site already has a Composer-installed copy, use a separate development
+site so Drupal does not find two copies of the module.
+
 ## Run the tests
 
 Use a disposable Drupal 11 development installation with this module at
