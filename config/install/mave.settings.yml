@@ -1,0 +1,9 @@
+api_endpoint: 'https://api.mave.io/api/v1'
+components_src: 'https://cdn.video-dns.com/npm/@maveio/components/+esm'
+cdn_endpoint: 'https://space-${this.spaceId}.video-dns.com'
+socket_endpoint: 'wss://dash.mave.io/api/v1/socket'
+upload_endpoint: 'https://upload.mave.io/files'
+metrics_endpoint: 'https://metrics.video-dns.com/v1/events'
+upload_subject: ''
+player_theme: default
+player_color: ''

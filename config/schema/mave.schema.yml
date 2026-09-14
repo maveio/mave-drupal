@@ -1,0 +1,48 @@
+mave.settings:
+  type: config_object
+  label: 'Mave settings'
+  mapping:
+    api_endpoint:
+      type: string
+      label: 'API endpoint'
+    components_src:
+      type: string
+      label: 'Components module URL'
+    cdn_endpoint:
+      type: string
+      label: 'CDN endpoint'
+    socket_endpoint:
+      type: string
+      label: 'Upload WebSocket endpoint'
+    upload_endpoint:
+      type: string
+      label: 'Upload endpoint'
+    metrics_endpoint:
+      type: string
+      label: 'Metrics endpoint'
+    upload_subject:
+      type: string
+      label: 'Upload target'
+    player_theme:
+      type: string
+      label: 'Default player theme'
+    player_color:
+      type: string
+      label: 'Default player color'
+media.source.mave:
+  type: media.source.field_aware
+  label: 'Mave media source'
+field.widget.settings.mave_picker:
+  type: mapping
+  label: 'Mave video picker'
+  mapping: {}
+field.formatter.settings.mave_player:
+  type: mapping
+  label: 'Mave player'
+  mapping:
+    theme:
+      type: string
+      label: 'Player theme'
+    color:
+      type: string
+      label: 'Player color'

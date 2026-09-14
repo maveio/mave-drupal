@@ -1,0 +1,7 @@
+services:
+  mave.thumbnails:
+    class: Drupal\mave\ThumbnailStore
+    arguments: ['@http_client', '@file_system']
+  mave.client:
+    class: Drupal\mave\MaveClient
+    arguments: ['@http_client', '@config.factory', '@state', '@datetime.time']

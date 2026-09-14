@@ -1,0 +1,11 @@
+{
+  "name": "drupal/mave",
+  "description": "Mave video library, direct uploads and playback for Drupal.",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://www.mave.io/",
+  "require": {
+    "php": ">=8.3",
+    "drupal/core": "^11"
+  }
+}

@@ -1,0 +1,11 @@
+name: Mave Video
+type: module
+description: 'Browse, upload and embed Mave videos using Drupal Media Library.'
+package: Media
+core_version_requirement: ^11
+configure: mave.settings
+dependencies:
+  - drupal:media
+  - drupal:media_library
+  - drupal:field
+  - drupal:ckeditor5

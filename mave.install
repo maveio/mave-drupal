@@ -1,0 +1,98 @@
+<?php
+
+/**
+ * @file
+ * Installs the Mave media type and its displays.
+ */
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\media\Entity\MediaType;
+
+/**
+ * Implements hook_install().
+ */
+function mave_install(): void {
+  if (MediaType::load('mave_video')) {
+    return;
+  }
+  MediaType::create([
+    'id' => 'mave_video',
+    'label' => 'Mave Video',
+    'description' => 'A video hosted on Mave.',
+    'source' => 'mave',
+    'source_configuration' => ['source_field' => 'field_mave_id'],
+    'queue_thumbnail_downloads' => FALSE,
+  ])->save();
+  foreach ([
+    'field_mave_id' => 'Mave video',
+    'field_mave_theme' => 'Player theme',
+    'field_mave_color' => 'Player color',
+  ] as $name => $label) {
+    if (!FieldStorageConfig::loadByName('media', $name)) {
+      FieldStorageConfig::create([
+        'field_name' => $name,
+        'entity_type' => 'media',
+        'type' => 'string',
+        'settings' => ['max_length' => $name === 'field_mave_id' ? 15 : 64],
+      ])->save();
+    }
+    FieldConfig::create([
+      'field_name' => $name,
+      'entity_type' => 'media',
+      'bundle' => 'mave_video',
+      'label' => $label,
+      'required' => $name === 'field_mave_id',
+      'description' => $name === 'field_mave_theme' ? 'Optional: default, dolphin or synthwave. Leave blank to inherit the default.' : ($name === 'field_mave_color' ? 'Optional color such as #635bff. Leave blank to inherit the default.' : ''),
+    ])->save();
+  }
+  foreach (['default', 'media_library'] as $mode) {
+    $display = EntityFormDisplay::create([
+      'targetEntityType' => 'media',
+      'bundle' => 'mave_video',
+      'mode' => $mode,
+      'status' => TRUE,
+    ]);
+    $display->setComponent('name', ['type' => 'string_textfield', 'weight' => -10]);
+    if ($mode === 'default') {
+      $display->setComponent('field_mave_id', ['type' => 'mave_picker', 'weight' => 0]);
+    }
+    else {
+      foreach (['uid', 'created', 'path', 'status'] as $field) {
+        $display->removeComponent($field);
+      }
+    }
+    $display->setComponent('field_mave_theme', ['type' => 'string_textfield', 'weight' => 5]);
+    $display->setComponent('field_mave_color', ['type' => 'string_textfield', 'weight' => 6]);
+    $display->save();
+  }
+  EntityViewDisplay::create([
+    'targetEntityType' => 'media',
+    'bundle' => 'mave_video',
+    'mode' => 'default',
+    'status' => TRUE,
+  ])
+    ->removeComponent('created')->removeComponent('uid')->removeComponent('thumbnail')
+    ->setComponent('field_mave_id', ['type' => 'mave_player', 'label' => 'hidden'])->save();
+  EntityViewDisplay::create([
+    'targetEntityType' => 'media',
+    'bundle' => 'mave_video',
+    'mode' => 'media_library',
+    'status' => TRUE,
+  ])
+    ->removeComponent('created')->removeComponent('uid')
+    ->setComponent('thumbnail', [
+      'type' => 'image',
+      'label' => 'hidden',
+      'settings' => ['image_style' => 'media_library', 'image_link' => ''],
+    ])->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function mave_uninstall(): void {
+  \Drupal::state()->delete('mave.api_key');
+}

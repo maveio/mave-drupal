@@ -1,0 +1,22 @@
+mave.settings:
+  path: '/admin/config/media/mave'
+  defaults:
+    _form: '\Drupal\mave\Form\SettingsForm'
+    _title: 'Mave Video'
+  requirements:
+    _permission: 'administer mave'
+mave.videos:
+  path: '/mave/api/videos'
+  defaults:
+    _controller: '\Drupal\mave\Controller\ApiController::videos'
+  methods: [GET]
+  requirements:
+    _permission: 'browse mave videos'
+mave.upload_token:
+  path: '/mave/api/upload-token'
+  defaults:
+    _controller: '\Drupal\mave\Controller\ApiController::uploadToken'
+  methods: [POST]
+  requirements:
+    _permission: 'upload mave videos'
+    _csrf_request_header_token: 'TRUE'

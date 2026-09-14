@@ -1,0 +1,24 @@
+player:
+  js:
+    js/player.js: {}
+  css:
+    component:
+      css/mave.css: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+    - core/drupal.announce
+picker:
+  js:
+    js/picker.js: {}
+  dependencies:
+    - mave/player
+    - core/drupal.ajax
+dialog:
+  js:
+    js/dialog.js: {}
+  dependencies:
+    - mave/picker
+    - core/drupal.dialog
+    - core/jquery

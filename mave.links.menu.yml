@@ -1,0 +1,5 @@
+mave.settings:
+  title: 'Mave Video'
+  description: 'Configure the Mave connection and player defaults.'
+  route_name: mave.settings
+  parent: system.admin_config_media

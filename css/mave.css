@@ -1,0 +1,102 @@
+mave-player.mave-video { display: block; width: 100%; max-width: 100%; aspect-ratio: 16 / 9; background: #101720; border-radius: 8px; overflow: hidden; }
+.ck-content .drupal-media:has(mave-player.mave-video) { display: block; width: 100%; margin-inline: 0; }
+.ck-content .drupal-media:has(mave-player.mave-video) [data-drupal-media-preview] { width: 100%; }
+.mave-picker { margin-block: 8px; color: var(--color-text, #232429); }
+.mave-picker [hidden] { display: none !important; }
+.mave-toolbar { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-block-end: 24px; }
+.mave-picker .mave-toolbar .mave-search-field { flex: 1; min-width: min(100%, 220px); margin: 0; }
+.mave-search-field label { display: block; margin-block-end: 8px; }
+.mave-search-field input { box-sizing: border-box; width: 100%; }
+.mave-toolbar .button, .mave-pagination .button, .mave-library-state .button { margin: 0; }
+.mave-location { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-block-end: 16px; }
+.mave-breadcrumbs ol { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.mave-breadcrumbs li { display: flex; align-items: baseline; gap: 8px; }
+.mave-breadcrumbs li + li::before { content: '/'; color: var(--color-gray-600, #55565b); }
+.mave-breadcrumb-link { appearance: none; padding: 0; border: 0; background: none; color: var(--color-link, #003ecc); text-decoration: underline; font: inherit; cursor: pointer; }
+.mave-result-count { white-space: nowrap; color: var(--color-gray-600, #55565b); font-size: 0.875rem; }
+.mave-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr)); gap: 16px; max-height: 380px; overflow-y: auto; padding: 5px; }
+.mave-card { position: relative; display: flex; flex-direction: column; padding: 0; margin: 0; overflow: hidden; border: 1px solid var(--color-gray-300, #d3d4d9); border-radius: 2px; background: var(--color-white, #fff); color: inherit; text-align: start; font: inherit; cursor: pointer; }
+.mave-card:hover { border-color: var(--color-link, #003ecc); box-shadow: inset 0 0 0 1px var(--color-link, #003ecc); }
+.mave-card[aria-pressed=true] { border-color: var(--color-link, #003ecc); box-shadow: inset 0 0 0 2px var(--color-link, #003ecc); background: var(--color-blue-050, #f3f4ff); }
+.mave-card:focus-visible, .mave-breadcrumb-link:focus-visible, .mave-preview summary:focus-visible { outline: 3px solid var(--color-focus, #26a769); outline-offset: 2px; }
+.mave-thumbnail { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 16 / 9; background: var(--color-gray-100, #edeff5); }
+.mave-thumbnail img { display: block; width: 100%; height: 100%; position: absolute; object-fit: cover; }
+.mave-folder::before { content: ''; width: 42px; height: 32px; background: var(--color-gray-600, #55565b); clip-path: polygon(0 0, 40% 0, 50% 16%, 100% 16%, 100% 100%, 0 100%); border-radius: 2px; }
+.mave-card-title { display: block; padding: 12px; line-height: 1.4; overflow-wrap: anywhere; }
+.mave-card-check { position: absolute; top: 8px; left: 8px; display: grid; place-items: center; box-sizing: border-box; width: 20px; height: 20px; border: 1px solid var(--color-gray-600, #55565b); border-radius: 2px; background: var(--color-white, #fff); }
+.mave-card[aria-pressed=true] .mave-card-check { background: var(--color-link, #003ecc); border-color: var(--color-link, #003ecc); }
+.mave-card[aria-pressed=true] .mave-card-check::after { content: '✓'; font-size: 15px; line-height: 1; color: #fff; }
+.mave-duration { position: absolute; right: 6px; bottom: 6px; padding: 2px 5px; background: #232429; color: #fff; font-size: 0.75rem; border-radius: 2px; }
+.mave-no-thumbnail { color: var(--color-gray-600, #55565b); font-size: 0.875rem; }
+.mave-pagination { display: flex; justify-content: center; gap: 16px; align-items: center; margin-block-start: 20px; }
+.mave-loading, .mave-library-state { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; box-sizing: border-box; min-height: 300px; padding: 24px; text-align: center; background: var(--color-gray-050, #f7f7f9); }
+.mave-library-state h3, .mave-library-state p { margin: 0; }
+.mave-picker .ajax-progress__throbber.mave-spinner { position: static; inset: auto; display: inline-block; flex-shrink: 0; width: 28px; height: 28px; margin: 0; border: 3px solid var(--color-absolutezero, #003ecc); border-right-color: transparent; border-radius: 50%; animation: mave-spin 0.75s linear infinite; }
+@keyframes mave-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .mave-picker .ajax-progress__throbber.mave-spinner { animation: none; } }
+.mave-status { margin-block: 16px; }
+.mave-upload-progress { width: 100%; margin-block-end: 16px; accent-color: var(--color-absolutezero, #003ecc); }
+.mave-preview { margin-block-start: 24px; border: 1px solid var(--color-gray-300, #d3d4d9); border-radius: 4px; background: var(--color-white, #fff); }
+.mave-preview summary { display: flex; align-items: center; gap: 16px; padding: 12px 16px; list-style: none; cursor: pointer; border-radius: 4px; }
+.mave-preview summary::-webkit-details-marker { display: none; }
+.mave-preview summary:hover { background: var(--color-gray-050, #f7f7f9); }
+.mave-preview-thumbnail { position: relative; display: grid; place-items: center; flex: 0 0 88px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 2px; background: var(--color-gray-100, #edeff5); }
+.mave-preview-thumbnail::before { content: ''; width: 16px; height: 20px; background: var(--color-gray-600, #55565b); clip-path: polygon(0 0, 100% 50%, 0 100%); }
+.mave-preview-thumbnail img { position: absolute; width: 100%; height: 100%; object-fit: cover; }
+.mave-preview-info { display: flex; flex: 1; flex-direction: column; gap: 4px; min-width: 0; line-height: 1.4; }
+.mave-preview-label { color: var(--color-gray-600, #55565b); font-size: 0.8125rem; font-weight: 400; }
+.mave-preview-title { font-weight: 600; overflow-wrap: anywhere; }
+.mave-preview-action { display: flex; align-items: center; gap: 12px; flex-shrink: 0; color: var(--color-link, #003ecc); font-size: 0.875rem; font-weight: 600; }
+.mave-preview-action::after { content: ''; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.mave-preview[open] .mave-preview-action::after { transform: translateY(2px) rotate(225deg); }
+.mave-preview-body { padding: 20px; border-top: 1px solid var(--color-gray-300, #d3d4d9); background: var(--color-gray-050, #f7f7f9); border-radius: 0 0 4px 4px; }
+.mave-preview-frame { position: relative; width: min(100%, 640px, max(240px, calc((100dvh - 320px) * 16 / 9))); aspect-ratio: 16 / 9; margin-inline: auto; overflow: hidden; border-radius: 4px; background: #101720; }
+.mave-preview-frame > mave-player { position: absolute; inset: 0; height: 100%; border-radius: 0; }
+.mave-preview-frame .mave-loading, .mave-preview-error { position: absolute; inset: 0; min-height: 0; margin: 0; padding: 20px; background: var(--color-gray-100, #edeff5); }
+.mave-preview-error { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; overflow: auto; text-align: center; }
+.mave-preview-error p, .mave-preview-error .button { margin: 0; }
+@media (max-width: 600px) {
+  .mave-preview summary { flex-wrap: wrap; gap: 12px; padding: 12px; }
+  .mave-preview-thumbnail { flex-basis: 64px; }
+  .mave-preview-info { flex-basis: calc(100% - 76px); }
+  .mave-preview-action { margin-inline-start: auto; }
+  .mave-preview-body { padding: 12px; }
+}
+.mave-upload-driver { display: none; }
+.ui-dialog:has(.mave-library-add-form) > .ui-dialog-buttonpane { display: flex; align-items: center; justify-content: flex-end; }
+.mave-dialog-selection { flex: 1; min-width: 0; margin: 16px 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.875rem; }
+.ui-dialog:has(.mave-library-add-form) .ui-dialog-buttonset { flex-shrink: 0; }
+/* Mave is the library; Drupal's media references are an implementation detail. */
+#media-library-content:has(.mave-library-add-form) > .views-element-container,
+.ui-dialog:has(.mave-library-add-form) .media-library-select,
+.ui-dialog:has(.mave-library-add-form) .js-media-library-selected-count { display: none; }
+
+/* The async library changes size after jQuery UI calculates its position.
+ * Keep the Mave dialog centered independently of that initial measurement. */
+.ui-dialog.media-library-widget-modal:has(.mave-library-add-form) {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: min(1100px, calc(100vw - 32px)) !important;
+  height: auto !important;
+  min-width: 0;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+}
+.ui-dialog.media-library-widget-modal:has(.mave-library-add-form) > .ui-dialog-titlebar,
+.ui-dialog.media-library-widget-modal:has(.mave-library-add-form) > .ui-dialog-buttonpane {
+  flex: 0 0 auto;
+}
+.ui-dialog.media-library-widget-modal:has(.mave-library-add-form) > .ui-dialog-content {
+  flex: 1 1 auto;
+  min-height: 0 !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: auto;
+  overscroll-behavior: contain;
+  box-sizing: border-box;
+}

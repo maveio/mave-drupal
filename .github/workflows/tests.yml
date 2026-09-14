@@ -1,0 +1,51 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  drupal:
+    name: Drupal 11
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/player.js
+          node --check js/picker.js
+          node --check js/dialog.js
+      - name: Build isolated Drupal test image
+        run: docker build -f tests/Dockerfile -t mave-drupal-ci .
+      - name: Start test site
+        run: |
+          docker run --detach --name mave-drupal-ci \
+            --volume "$PWD:/opt/drupal/web/modules/custom/mave:ro" \
+            mave-drupal-ci
+          for attempt in $(seq 1 30); do
+            if docker exec mave-drupal-ci curl --silent --output /dev/null http://localhost; then
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: PHPUnit
+        run: |
+          docker exec --user www-data mave-drupal-ci php -d zend.assertions=1 \
+            vendor/bin/phpunit -c web/core/phpunit.xml.dist \
+            --fail-on-warning --fail-on-deprecation --fail-on-skipped \
+            web/modules/custom/mave/tests/src
+      - name: Drupal coding standards
+        run: |
+          docker exec mave-drupal-ci vendor/bin/phpcs --standard=Drupal \
+            --extensions=php,module,install,inc,yml web/modules/custom/mave
+      - name: Composer metadata
+        run: docker exec mave-drupal-ci composer validate --strict web/modules/custom/mave/composer.json
+      - name: Stop test site
+        if: always()
+        run: docker rm --force mave-drupal-ci || true

@@ -1,0 +1,8 @@
+administer mave:
+  title: 'Administer Mave settings'
+  restrict access: true
+browse mave videos:
+  title: 'Browse the Mave video library'
+upload mave videos:
+  title: 'Upload videos to Mave'
+  restrict access: true
