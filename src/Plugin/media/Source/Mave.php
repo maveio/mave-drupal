@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\mave\Plugin\media\Source;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\field\FieldConfigInterface;
 use Drupal\media\Attribute\MediaSource;
 use Drupal\media\MediaInterface;
 use Drupal\media\MediaSourceBase;
@@ -40,7 +41,7 @@ final class Mave extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->client = $container->get('mave.client');
     $instance->thumbnails = $container->get('mave.thumbnails');
@@ -61,7 +62,7 @@ final class Mave extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function getMetadata(MediaInterface $media, $attribute_name) {
+  public function getMetadata(MediaInterface $media, $attribute_name): mixed {
     $id = (string) $this->getSourceFieldValue($media);
     if (!MaveClient::validEmbedId($id)) {
       return parent::getMetadata($media, $attribute_name);
@@ -84,7 +85,7 @@ final class Mave extends MediaSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function createSourceField(MediaTypeInterface $type) {
+  public function createSourceField(MediaTypeInterface $type): FieldConfigInterface {
     return parent::createSourceField($type)->set('label', 'Mave video')->set('description', 'Select a Mave video or upload a new one.');
   }
 

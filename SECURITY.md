@@ -5,9 +5,11 @@ Follow [Mave's responsible-disclosure policy](https://www.mave.io/docs/responsib
 Include the module and Drupal versions, required permissions, reproduction steps
 and impact. Remove keys, signed URLs and customer data from reports and logs.
 
-This module is preparing its first release. It does not currently claim Drupal
-Security Team advisory coverage. A source audit or passing tests do not establish
-Drupal.org coverage; check the published project's status when available.
+This module does not currently claim Drupal Security Team advisory coverage.
+A stable release alone, a source audit or passing tests do not establish
+coverage; check the [Drupal.org project status](https://www.drupal.org/project/mave).
+Maintainer review and project opt-in are separate from the release process;
+see [releasing](docs/releasing.md#security-advisory-coverage).
 
 ## Security boundaries
 

@@ -93,7 +93,7 @@ final class ThumbnailStoreTest extends UnitTestCase {
    * Tests invalid id cannot trigger download.
    */
   public function testInvalidIdCannotTriggerDownload(): void {
-    $store = new ThumbnailStore(new Client(['handler' => new MockHandler()]), $this->createMock(FileSystemInterface::class));
+    $store = new ThumbnailStore(new Client(['handler' => new MockHandler()]), $this->createStub(FileSystemInterface::class));
     self::assertNull($store->localUri('https://cdn.example.test/thumbnail.jpg', '../../etc/passwd'));
   }
 

@@ -6,6 +6,6 @@
   "homepage": "https://www.mave.io/",
   "require": {
     "php": ">=8.3",
-    "drupal/core": "^11"
+    "drupal/core": "^11.0 || ^12"
   }
 }

@@ -63,7 +63,7 @@ final class MaveClientTest extends UnitTestCase {
     $stack->push(Middleware::history($this->history));
     $state = $this->createMock(StateInterface::class);
     $state->method('get')->with('mave.api_key', '')->willReturn($key);
-    $time = $this->createMock(TimeInterface::class);
+    $time = $this->createStub(TimeInterface::class);
     $time->method('getCurrentTime')->willReturn(1700000000);
     $data = $settings + [
       'api_endpoint' => 'https://api.example.test/api/v1',
@@ -76,7 +76,7 @@ final class MaveClientTest extends UnitTestCase {
       'player_theme' => 'default',
       'player_color' => '',
     ];
-    $config = $this->createMock(ImmutableConfig::class);
+    $config = $this->createStub(ImmutableConfig::class);
     $config->method('getRawData')->willReturn($data);
     $config->method('get')->willReturnCallback(static fn($name) => $data[$name] ?? NULL);
     $factory = $this->createMock(ConfigFactoryInterface::class);

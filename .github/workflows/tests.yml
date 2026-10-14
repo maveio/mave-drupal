@@ -10,7 +10,11 @@ permissions:
 
 jobs:
   drupal:
-    name: Drupal 11
+    name: Drupal ${{ matrix.drupal }}
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal: ['11.4.9', '12.0.0-beta1']
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -21,7 +25,7 @@ jobs:
           node --check js/picker.js
           node --check js/dialog.js
       - name: Build isolated Drupal test image
-        run: docker build -f tests/Dockerfile -t mave-drupal-ci .
+        run: docker build -f tests/Dockerfile --build-arg DRUPAL_VERSION=${{ matrix.drupal }} -t mave-drupal-ci .
       - name: Start test site
         run: |
           docker run --detach --name mave-drupal-ci \

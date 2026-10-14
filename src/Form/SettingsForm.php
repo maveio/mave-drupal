@@ -29,7 +29,7 @@ final class SettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): static {
     $instance = parent::create($container);
     $instance->client = $container->get('mave.client');
     $instance->state = $container->get('state');

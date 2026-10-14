@@ -48,7 +48,9 @@ slow/failed requests and retry. Use a separate test browser for viewport emulati
 
 GitHub Actions runs the unit/functional tests, Drupal PHP coding standards,
 Composer validation and JavaScript syntax checks on pushes and pull requests.
-Its `tests/Dockerfile` pins the tested Drupal image and matching core-dev package.
+Its matrix tests Drupal 11.4.9 and Drupal 12.0.0-beta1 on PHP 8.5, using matching
+core-dev packages. Drupal 12 requires a source installation of core to include
+the test framework; `tests/Dockerfile` configures this for both versions.
 It uses a disposable SQLite site and needs no Mave credentials.
 
 The included `.gitlab-ci.yml` uses Drupal's maintained GitLab templates. PHPUnit

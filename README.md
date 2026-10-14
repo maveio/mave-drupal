@@ -37,13 +37,14 @@ Videos stay in Mave; Drupal stores the references you choose for your content.
 
 ## Get started
 
-Requires Drupal 11, PHP 8.3 or newer, and a Mave installation with an API key.
+Requires Drupal 11 or 12 and a Mave installation with an API key. Drupal 11
+requires PHP 8.3 or newer; Drupal 12 requires PHP 8.5 or newer.
 The module enables its core Media, Media Library and CKEditor 5 dependencies.
 
 From your Drupal project's root directory:
 
 ```sh
-composer require 'drupal/mave:^1.0@beta'
+composer require 'drupal/mave:^1.0'
 drush en mave -y
 drush cr
 ```

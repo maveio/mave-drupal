@@ -6,6 +6,9 @@ namespace Drupal\Tests\mave\Functional;
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormState;
 use Drupal\media\Entity\Media;
 use Drupal\media\Entity\MediaType;
 use Drupal\Tests\BrowserTestBase;
@@ -37,6 +40,36 @@ final class ApiAccessTest extends BrowserTestBase {
     self::assertSame('mave_picker', EntityFormDisplay::load('media.mave_video.default')->getComponent('field_mave_id')['type']);
     self::assertSame('mave_player', EntityViewDisplay::load('media.mave_video.default')->getComponent('field_mave_id')['type']);
     self::assertArrayNotHasKey('api_key', $this->config('mave.settings')->getRawData());
+  }
+
+  /**
+   * Tests discovered hooks register the player and attach it once to editors.
+   */
+  public function testPlayerHooks(): void {
+    $registry = $this->container->get('theme.registry')->get();
+    self::assertSame('mave-player', $registry['mave_player']['template']);
+    self::assertSame('default', $registry['mave_player']['variables']['player_theme']);
+
+    $this->container->get('state')->set('mave.api_key', 'synthetic-hook-secret');
+    $definition = $this->createStub(FieldDefinitionInterface::class);
+    $items = $this->createStub(FieldItemListInterface::class);
+    $items->method('getFieldDefinition')->willReturn($definition);
+    $definition->method('getType')->willReturnOnConsecutiveCalls('text', 'text_long', 'text_with_summary', 'string');
+    $form_state = new FormState();
+    $context = ['items' => $items];
+    foreach (['text', 'text_long', 'text_with_summary', 'string'] as $type) {
+      $element = [];
+      $this->container->get('module_handler')->alter('field_widget_single_element_form', $element, $form_state, $context);
+      if ($type === 'string') {
+        self::assertSame([], $element);
+        continue;
+      }
+      self::assertSame('true', $element['#attributes']['data-mave-editor']);
+      self::assertSame(['mave/player'], $element['#attached']['library']);
+      self::assertSame(['config:mave.settings'], $element['#cache']['tags']);
+      self::assertArrayNotHasKey('api_key', $element['#attached']['drupalSettings']['mave']);
+      self::assertStringNotContainsString('synthetic-hook-secret', json_encode($element, JSON_THROW_ON_ERROR));
+    }
   }
 
   /**

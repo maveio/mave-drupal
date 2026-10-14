@@ -5,3 +5,7 @@ services:
   mave.client:
     class: Drupal\mave\MaveClient
     arguments: ['@http_client', '@config.factory', '@state', '@datetime.time']
+
+  Drupal\mave\Hook\MaveHooks:
+    class: Drupal\mave\Hook\MaveHooks
+    arguments: ['@mave.client']

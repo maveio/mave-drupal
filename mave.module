@@ -6,24 +6,21 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Hook\Attribute\LegacyHook;
+use Drupal\mave\Hook\MaveHooks;
 
 /**
  * Implements hook_theme().
  */
+#[LegacyHook]
 function mave_theme($existing, $type, $theme, $path): array {
-  return ['mave_player' => ['variables' => ['embed_id' => '', 'player_theme' => 'default', 'color' => '']]];
+  return \Drupal::service(MaveHooks::class)->theme($existing, $type, $theme, $path);
 }
 
 /**
  * Implements hook_field_widget_single_element_form_alter().
  */
+#[LegacyHook]
 function mave_field_widget_single_element_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
-  // CKEditor loads media preview HTML asynchronously, without its attachments.
-  $type = $context['items']->getFieldDefinition()->getType();
-  if (in_array($type, ['text', 'text_long', 'text_with_summary'], TRUE)) {
-    $element['#attributes']['data-mave-editor'] = 'true';
-    $element['#attached']['library'][] = 'mave/player';
-    $element['#attached']['drupalSettings']['mave'] = \Drupal::service('mave.client')->publicSettings();
-    $element['#cache']['tags'][] = 'config:mave.settings';
-  }
+  \Drupal::service(MaveHooks::class)->fieldWidgetSingleElementFormAlter($element, $form_state, $context);
 }

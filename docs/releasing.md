@@ -44,6 +44,34 @@ at `https://github.com/maveio/mave-drupal`.
    and wait for its generated downloads and package metadata. Remove `@beta`
    from the README's installation command when publishing a stable release.
 
+## Stable 1.0.0 release
+
+The first beta is already published as `1.0.0-beta1`. Prepare `1.0.0` from
+the updated source rather than renaming or moving that existing tag.
+
+1. Review the Drupal 12 changes from [issue #3628107](https://www.drupal.org/project/mave/issues/3628107).
+   The hooks use class implementations, with legacy shims for Drupal 11.0.
+   Composer and `mave.info.yml` must declare the same core compatibility.
+2. Require green GitHub and Drupal GitLab pipelines for the release commit.
+   The GitHub matrix covers Drupal 11.4.9 and Drupal 12.0.0-beta1; the latter
+   establishes compatibility with that prerelease, not a future final release.
+3. Complete the browser smoke test from step 3 above, including a real upload,
+   processing, selection, CKEditor preview and anonymous playback against the
+   intended Mave endpoints. Record the component build and results. Automated
+   module tests do not replace this integration check.
+4. Change the README install command to `composer require 'drupal/mave:^1.0'`
+   and remove its upcoming-release note in the release commit. Publish that
+   same commit to GitHub and Drupal's
+   `1.0.x` branch, tag `1.0.0`, then create a stable Drupal.org release. Use the
+   prepared notes in [CHANGELOG.md](../CHANGELOG.md), updating their heading
+   and adding the release date when published.
+5. Verify a clean Composer installation of `drupal/mave:1.0.0`, module
+   enablement and the media workflow. Set the release as recommended/supported
+   on Drupal.org. Update the project description's Drupal/PHP requirements.
+
+Keep the README's `@beta` command until the stable package is actually being
+published; it still describes the currently available release.
+
 The automated tests currently cover install-time media configuration, route
 permissions and CSRF, key isolation, API validation and errors, JWT generation,
 folder-first pagination and thumbnail resource limits. UI and full SaaS upload
@@ -53,10 +81,28 @@ come from the hosted pipeline; one local Drupal version does not prove all of ^1
 ## Security advisory coverage
 
 Publishing a project and obtaining Drupal Security Team advisory coverage are
-separate steps. An eligible maintainer can opt in; otherwise apply for the
-permission through the security advisory coverage review process. Do not claim
-coverage until the project's status actually shows it. Pre-releases do not
-receive the same coverage as qualifying stable releases.
+separate steps. The warning means the project has not opted into Drupal's
+advisory process; it is not itself a report of a vulnerability.
+
+1. Sign into the personal account that committed the module's code. Check its
+   profile for **Can opt projects into security advisory coverage**. If the
+   permission is already present, no new application is needed.
+2. Otherwise, apply once in the [security advisory coverage applications queue](https://www.drupal.org/project/projectapplications).
+   Use the project branch containing the applicant's commits, not an issue
+   fork. Enable GitLab CI, validate Composer metadata and resolve coding
+   standards failures before requesting review. See the prepared
+   [application text](security-coverage-application.md).
+3. After approval, edit the Mave project and enable **Security advisory
+   coverage**. Drupal requires a full project, an eligible maintainer with
+   VCS write access, no open public issues tagged security, and a project at
+   least ten days old. Opt-in cannot be undone by the maintainer.
+4. Publish and support a stable release. Alpha, beta and RC releases do not
+   receive advisory coverage. Verify the project and release actually show
+   the coverage shield before changing any coverage claims in documentation.
+
+A stable `1.0.0` can be published before review finishes, but it will not
+remove the coverage warning by itself. Plan time for volunteer review, which
+can take weeks; reviewing three other applications can qualify for priority.
 
 ## Official references
 
