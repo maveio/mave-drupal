@@ -54,7 +54,6 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $config = $this->configFactory()->get('mave.settings');
     $form['connection'] = [
       '#type' => 'item',
       '#title' => $this->t('Connection'),
@@ -70,19 +69,19 @@ final class SettingsForm extends ConfigFormBase {
     $form['upload_subject'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Upload target'),
-      '#default_value' => $config->get('upload_subject'),
+      '#config_target' => 'mave.settings:upload_subject',
       '#description' => $this->t('Optional space or collection ID. Leave blank to use the API key’s space.'),
     ];
     $form['player_theme'] = [
       '#type' => 'select',
       '#title' => $this->t('Default player theme'),
       '#options' => ['default' => 'Default', 'dolphin' => 'Dolphin', 'synthwave' => 'Synthwave'],
-      '#default_value' => $config->get('player_theme'),
+      '#config_target' => 'mave.settings:player_theme',
     ];
     $form['player_color'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Default player color'),
-      '#default_value' => $config->get('player_color'),
+      '#config_target' => 'mave.settings:player_color',
       '#description' => $this->t('Optional hex color, for example #635bff.'),
     ];
     $form['endpoints'] = [
@@ -94,7 +93,7 @@ final class SettingsForm extends ConfigFormBase {
       $form['endpoints'][$key] = [
         '#type' => 'textfield',
         '#title' => $label,
-        '#default_value' => $config->get($key),
+        '#config_target' => 'mave.settings:' . $key,
         '#required' => TRUE,
       ];
     }
@@ -119,6 +118,14 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
+    // Normalize values before ConfigFormBase validates their config targets.
+    foreach (array_merge(array_keys($this->endpointLabels()), [
+      'upload_subject',
+      'player_theme',
+      'player_color',
+    ]) as $key) {
+      $form_state->setValue($key, trim($form_state->getValue($key)));
+    }
     parent::validateForm($form, $form_state);
     foreach ($this->endpointLabels() as $key => $label) {
       $value = str_replace([
@@ -146,15 +153,7 @@ final class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $config = $this->config('mave.settings');
-    foreach (array_merge(array_keys($this->endpointLabels()), [
-      'upload_subject',
-      'player_theme',
-      'player_color',
-    ]) as $key) {
-      $config->set($key, trim($form_state->getValue($key)));
-    }
-    $config->save();
+    // Credentials must remain outside exported configuration.
     if (Settings::get('mave_api_key') === NULL && ($key = trim($form_state->getValue('api_key')))) {
       $this->state->set('mave.api_key', MaveClient::normalizeKey($key));
     }

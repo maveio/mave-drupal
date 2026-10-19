@@ -12,7 +12,7 @@
 Browse, upload and embed Mave videos through Drupal Media Library and CKEditor 5.
 Videos stay in Mave; Drupal stores the references you choose for your content.
 
-[Get started](#get-started) · [Configuration](docs/configuration.md) ·
+[Installation](#installation) · [Configuration](#configuration) ·
 [Contribute](CONTRIBUTING.md)
 
 ## From library to page
@@ -35,11 +35,13 @@ Videos stay in Mave; Drupal stores the references you choose for your content.
   </tr>
 </table>
 
-## Get started
+## Requirements
 
 Requires Drupal 11 or 12 and a Mave installation with an API key. Drupal 11
 requires PHP 8.3 or newer; Drupal 12 requires PHP 8.5 or newer.
 The module enables its core Media, Media Library and CKEditor 5 dependencies.
+
+## Installation
 
 From your Drupal project's root directory:
 
@@ -48,6 +50,8 @@ composer require 'drupal/mave:^1.0'
 drush en mave -y
 drush cr
 ```
+
+## Configuration
 
 1. Open **Configuration → Media → Mave Video** and configure the connection.
 2. Grant editors the Mave browse/upload permissions and relevant media permissions.
