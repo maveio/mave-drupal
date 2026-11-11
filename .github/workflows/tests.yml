@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        drupal: ['11.4.10', '12.0.0-beta2']
+        drupal: ['11.4.12', '12.0.0-beta2']
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -46,7 +46,7 @@ jobs:
             web/modules/custom/mave/tests/src
       - name: Drupal coding standards
         run: |
-          docker exec mave-drupal-ci vendor/bin/phpcs --standard=Drupal \
+          docker exec mave-drupal-ci vendor/bin/phpcs --standard=Drupal,DrupalPractice \
             --extensions=php,module,install,inc,yml web/modules/custom/mave
       - name: Composer metadata
         run: docker exec mave-drupal-ci composer validate --strict web/modules/custom/mave/composer.json

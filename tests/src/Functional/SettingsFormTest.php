@@ -33,6 +33,7 @@ final class SettingsFormTest extends BrowserTestBase {
     $defaults = $this->config('mave.settings')->getRawData();
     unset($defaults['_core']);
     $this->drupalGet('admin/config/media/mave');
+    $this->assertSession()->pageTextContains('Paste the API key created in Mave.');
     foreach ($defaults as $name => $value) {
       $this->assertSession()->fieldValueEquals($name, $value);
     }
@@ -51,7 +52,8 @@ final class SettingsFormTest extends BrowserTestBase {
     $edit = array_map(static fn(string $value): string => '  ' . $value . '  ', $settings);
     // Select elements only accept one of the available option values.
     $edit['player_theme'] = $settings['player_theme'];
-    $edit['api_key'] = 'synthetic-id:synthetic-secret';
+    $key = base64_encode('synthetic-id:synthetic-secret');
+    $edit['api_key'] = '  ' . $key . '  ';
     $this->submitForm($edit, 'Save configuration');
     $this->assertSession()->pageTextContains('The configuration options have been saved.');
     $this->assertSavedSettings($settings);
@@ -59,7 +61,6 @@ final class SettingsFormTest extends BrowserTestBase {
       $this->assertSession()->fieldValueEquals($name, $value);
     }
 
-    $key = base64_encode('synthetic-id:synthetic-secret');
     $state = $this->container->get('state');
     $state->resetCache();
     self::assertSame($key, $state->get('mave.api_key'));

@@ -29,7 +29,7 @@ export BROWSERTEST_OUTPUT_DIRECTORY="$PWD/web/sites/simpletest/browser_output"
 mkdir -p "$BROWSERTEST_OUTPUT_DIRECTORY"
 php -d zend.assertions=1 vendor/bin/phpunit -c web/core/phpunit.xml.dist \
   --fail-on-warning --fail-on-deprecation web/modules/custom/mave/tests/src
-vendor/bin/phpcs --standard=Drupal --extensions=php,module,install,inc,yml \
+vendor/bin/phpcs --standard=Drupal,DrupalPractice --extensions=php,module,install,inc,yml \
   web/modules/custom/mave
 ```
 
@@ -48,7 +48,7 @@ slow/failed requests and retry. Use a separate test browser for viewport emulati
 
 GitHub Actions runs the unit/functional tests, Drupal PHP coding standards,
 Composer validation and JavaScript syntax checks on pushes and pull requests.
-Its matrix tests Drupal 11.4.10 and Drupal 12.0.0-beta2 on PHP 8.5, using matching
+Its matrix tests Drupal 11.4.12 and Drupal 12.0.0-beta2 on PHP 8.5, using matching
 core-dev packages. Drupal 12 requires a source installation of core to include
 the test framework; `tests/Dockerfile` configures this for both versions.
 It uses a disposable SQLite site and needs no Mave credentials.

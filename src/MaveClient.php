@@ -47,15 +47,14 @@ final class MaveClient {
    * Returns the server-side credential, preferring settings.php.
    */
   public function apiKey(): string {
-    return self::normalizeKey((string) Settings::get('mave_api_key', $this->state->get('mave.api_key', '')));
+    return trim((string) Settings::get('mave_api_key', $this->state->get('mave.api_key', '')));
   }
 
   /**
-   * Normalizes a raw credential pair or an already encoded API key.
+   * Restricts player themes to the built-in choices supported by this module.
    */
-  public static function normalizeKey(string $value): string {
-    $value = trim($value);
-    return str_contains($value, ':') ? base64_encode($value) : $value;
+  public static function playerTheme(mixed $value): string {
+    return in_array($value, ['default', 'dolphin', 'synthwave'], TRUE) ? $value : 'default';
   }
 
   /**
@@ -236,7 +235,7 @@ final class MaveClient {
         'upload' => ['endpoint' => $s['upload_endpoint'], 'socket' => $s['socket_endpoint']],
         'metrics' => ['endpoint' => $s['metrics_endpoint']],
       ],
-      'playerTheme' => $s['player_theme'],
+      'playerTheme' => self::playerTheme($s['player_theme']),
       'playerColor' => $s['player_color'],
     ];
   }

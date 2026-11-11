@@ -13,6 +13,7 @@ variables:
   _PHPUNIT_CONCURRENT: '0'
   _PHPUNIT_EXTRA: '--fail-on-warning --fail-on-deprecation --fail-on-skipped'
   _CSPELL_DICTIONARY: '.cspell-project-words.txt'
+  _PHPCS_EXTRA: '--standard=Drupal,DrupalPractice'
 
 # Keep these release checks blocking even if template defaults change.
 phpunit:

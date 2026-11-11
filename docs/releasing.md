@@ -2,7 +2,9 @@
 
 The contents of this module directory belong at the root of the public project
 repository: `mave.info.yml`, `mave.module`, `mave.install`, `composer.json`,
-`src/`, `config/`, `templates/`, `js/`, `css/`, tests, documentation and license.
+`src/`, `config/`, `templates/`, `js/`, `css/`, tests and documentation.
+Drupal.org adds `LICENSE.txt` when packaging releases; do not commit that file
+to the source repository.
 The surrounding OrbStack workspace, `.local/`, site volumes, recordings and
 SaaS connection scripts are development infrastructure and must not be published.
 
@@ -53,7 +55,7 @@ the updated source rather than renaming or moving that existing tag.
    The hooks use class implementations, with legacy shims for Drupal 11.0.
    Composer and `mave.info.yml` must declare the same core compatibility.
 2. Require green GitHub and Drupal GitLab pipelines for the release commit.
-   The GitHub matrix covers Drupal 11.4.10 and Drupal 12.0.0-beta2; the latter
+   The GitHub matrix covers Drupal 11.4.12 and Drupal 12.0.0-beta2; the latter
    establishes compatibility with that prerelease, not a future final release.
 3. Complete the browser smoke test from step 3 above, including a real upload,
    processing, selection, CKEditor preview and anonymous playback against the
@@ -95,8 +97,11 @@ advisory process; it is not itself a report of a vulnerability.
 3. After approval, edit the Mave project and enable **Security advisory
    coverage**. Drupal requires a full project, an eligible maintainer with
    VCS write access, no open public issues tagged security, and a project at
-   least ten days old. Opt-in cannot be undone by the maintainer.
-4. Publish and support a stable release. Alpha, beta and RC releases do not
+   least fourteen days old. Opt-in cannot be undone by the maintainer.
+4. At opt-in, update `SECURITY.md` so Drupal module vulnerability reports go to
+   https://www.drupal.org/security-team/report-issue. Keep cert@mave.io for
+   hosted-service reports. Only the Drupal Security Team can reverse coverage.
+5. Publish and support a stable release. Alpha, beta and RC releases do not
    receive advisory coverage. Verify the project and release actually show
    the coverage shield before changing any coverage claims in documentation.
 

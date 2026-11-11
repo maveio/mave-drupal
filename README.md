@@ -70,6 +70,7 @@ Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 
 ## License
 
-Copyright (c) mave.io B.V. [GPL-2.0-or-later](LICENSE.txt).
+Copyright (c) mave.io B.V. [GPL-2.0-or-later](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+Drupal.org adds `LICENSE.txt` to release packages.
 External components and trademarks retain their own terms; see
 [third-party notices](THIRD_PARTY_NOTICES.md).

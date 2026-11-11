@@ -62,7 +62,7 @@ final class SettingsForm extends ConfigFormBase {
     $form['api_key'] = [
       '#type' => 'password',
       '#title' => $this->t('Mave API key'),
-      '#description' => $this->t('Leave blank to keep the current key. Stored separately from exported configuration. For deployments, set $settings["mave_api_key"] in settings.php.'),
+      '#description' => $this->t('Paste the API key created in Mave. Leave blank to keep the current key. Stored separately from exported configuration. For deployments, set $settings["mave_api_key"] in settings.php.'),
       '#disabled' => Settings::get('mave_api_key') !== NULL,
       '#attributes' => ['autocomplete' => 'new-password'],
     ];
@@ -75,7 +75,11 @@ final class SettingsForm extends ConfigFormBase {
     $form['player_theme'] = [
       '#type' => 'select',
       '#title' => $this->t('Default player theme'),
-      '#options' => ['default' => 'Default', 'dolphin' => 'Dolphin', 'synthwave' => 'Synthwave'],
+      '#options' => [
+        'default' => $this->t('Default'),
+        'dolphin' => $this->t('Dolphin'),
+        'synthwave' => $this->t('Synthwave'),
+      ],
       '#config_target' => 'mave.settings:player_theme',
     ];
     $form['player_color'] = [
@@ -155,7 +159,7 @@ final class SettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     // Credentials must remain outside exported configuration.
     if (Settings::get('mave_api_key') === NULL && ($key = trim($form_state->getValue('api_key')))) {
-      $this->state->set('mave.api_key', MaveClient::normalizeKey($key));
+      $this->state->set('mave.api_key', $key);
     }
     parent::submitForm($form, $form_state);
   }

@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+- Limit per-video themes to the built-in choices. Unsupported saved themes fall
+  back to the default player. Theme selectors offer only Default, Dolphin and
+  Synthwave, with Default selected for empty or unsupported stored values.
+
+- Address the follow-up Drupal advisory coverage review: remove the committed
+  license text (Drupal.org adds it to release packages), translate player theme
+  labels and document the trusted serialization round-trips in tests.
+- Enforce both Drupal and DrupalPractice coding standards in CI, including tests.
+- Clarify that Mave generates API credentials, document the
+  two-hour token lifetime and add the reporting handover required at security
+  advisory coverage opt-in.
+- Use the complete API key copied from Mave directly for requests and uploads;
+  remove automatic encoding of raw credential pairs.
+- Exclude maintainer release/application guides from distribution archives.
+- Update the Drupal 11 test target to 11.4.12; retain Drupal 12.0.0-beta2 coverage.
+
 ## 1.0.0 — 2026-10-14
 
 - Add Drupal 12 compatibility in Composer and module metadata.

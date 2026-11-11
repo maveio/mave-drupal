@@ -7,3 +7,5 @@
 /.cspell-project-words.txt export-ignore
 /.prettierrc.json export-ignore
 /tests export-ignore
+/docs/security-coverage-application.md export-ignore
+/docs/releasing.md export-ignore

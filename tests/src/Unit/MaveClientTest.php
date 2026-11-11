@@ -30,7 +30,7 @@ use PHPUnit\Framework\Attributes\Group;
 #[Group('mave')]
 final class MaveClientTest extends UnitTestCase {
 
-  private const KEY = 'synthetic-test-signing-key';
+  private const KEY = 'c3ludGhldGljLWlkOnN5bnRoZXRpYy1zZWNyZXQ=';
 
   /**
    * Captured synthetic HTTP transactions.
@@ -95,6 +95,30 @@ final class MaveClientTest extends UnitTestCase {
     self::assertFalse($this->history[0]['options']['allow_redirects']);
     self::assertStringNotContainsString('override-test-key', json_encode($client->publicSettings()));
     self::assertStringNotContainsString(self::KEY, json_encode($client->settings()));
+  }
+
+  /**
+   * Tests the copied API key is used unchanged from either storage source.
+   */
+  #[DataProvider('credentialSources')]
+  public function testCopiedApiKeyIsUsedUnchanged(bool $override): void {
+    if ($override) {
+      new Settings(['mave_api_key' => '  ' . self::KEY . '  ']);
+    }
+    $client = $this->client([new Response(200, [], '{"data":[]}')], key: '  ' . self::KEY . '  ');
+    self::assertSame(self::KEY, $client->apiKey());
+    $client->listVideos();
+    self::assertSame('Bearer ' . self::KEY, $this->history[0]['request']->getHeaderLine('Authorization'));
+    [$header, $payload, $signature] = explode('.', $client->uploadToken()['token']);
+    $expected = rtrim(strtr(base64_encode(hash_hmac('sha256', "$header.$payload", self::KEY, TRUE)), '+/', '-_'), '=');
+    self::assertSame($expected, $signature);
+  }
+
+  /**
+   * Provides both supported credential storage sources.
+   */
+  public static function credentialSources(): array {
+    return ['state' => [FALSE], 'settings override' => [TRUE]];
   }
 
   /**
