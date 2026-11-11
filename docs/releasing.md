@@ -55,8 +55,8 @@ the updated source rather than renaming or moving that existing tag.
    The hooks use class implementations, with legacy shims for Drupal 11.0.
    Composer and `mave.info.yml` must declare the same core compatibility.
 2. Require green GitHub and Drupal GitLab pipelines for the release commit.
-   The GitHub matrix covers Drupal 11.4.12 and Drupal 12.0.0-beta2; the latter
-   establishes compatibility with that prerelease, not a future final release.
+   The GitHub matrix covers Drupal 11.4.12 and the current Drupal 12.0.x development
+   branch; the latter checks upcoming compatibility, not a final release.
 3. Complete the browser smoke test from step 3 above, including a real upload,
    processing, selection, CKEditor preview and anonymous playback against the
    intended Mave endpoints. Record the component build and results. Automated

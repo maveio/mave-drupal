@@ -16,7 +16,8 @@
 - Use the complete API key copied from Mave directly for requests and uploads;
   remove automatic encoding of raw credential pairs.
 - Exclude maintainer release/application guides from distribution archives.
-- Update the Drupal 11 test target to 11.4.12; retain Drupal 12.0.0-beta2 coverage.
+- Update the test targets to Drupal 11.4.12 and the current Drupal 12.0.x
+  development branch, with current PHP and test dependencies.
 
 ## 1.0.0 — 2026-10-14
 
