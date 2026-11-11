@@ -9,7 +9,12 @@ This module does not currently claim Drupal Security Team advisory coverage.
 A stable release alone, a source audit or passing tests do not establish
 coverage; check the [Drupal.org project status](https://www.drupal.org/project/mave).
 Maintainer review and project opt-in are separate from the release process;
-see [releasing](docs/releasing.md#security-advisory-coverage).
+see the repository's `docs/releasing.md` checklist.
+
+Once the project opts into Drupal security advisory coverage, report Drupal
+module vulnerabilities to the [Drupal Security Team](https://www.drupal.org/security-team/report-issue).
+Maintainers must update this reporting guidance when opting in. Reports about
+the Mave hosted service continue to go to cert@mave.io.
 
 ## Security boundaries
 
@@ -21,6 +26,8 @@ see [releasing](docs/releasing.md#security-advisory-coverage).
   `upload mave videos`, a session and Drupal's CSRF token.
 - Upload tokens are short-lived bearer credentials with a server-chosen target.
   Mave's upload service must verify them and enforce scope and expiry.
+  They are signed with the complete API key copied from Mave and expire after
+  two hours.
 - Video IDs, upstream responses and metadata are untrusted. They must not enable
   script injection, credential disclosure or arbitrary file writes.
 - Cached thumbnails are public. Published video access is governed by Mave's

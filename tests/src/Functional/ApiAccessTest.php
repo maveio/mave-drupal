@@ -80,16 +80,82 @@ final class ApiAccessTest extends BrowserTestBase {
       'bundle' => 'mave_video',
       'field_mave_id' => 'abcdefghijklmno',
     ]);
+    // Only round-trip a plugin created by this test, never untrusted input.
+    // phpcs:ignore DrupalPractice.FunctionCalls.InsecureUnserialize.InsecureUnserialize
     $source = unserialize(serialize(MediaType::load('mave_video')->getSource()));
     // Without an API key the source falls back to the ID, without a request.
     self::assertSame('abcdefghijklmno', $source->getMetadata($media, 'default_name'));
 
     $display = EntityViewDisplay::load('media.mave_video.default');
+    // Only round-trip a plugin created by this test, never untrusted input.
+    // phpcs:ignore DrupalPractice.FunctionCalls.InsecureUnserialize.InsecureUnserialize
     $formatter = unserialize(serialize($display->getRenderer('field_mave_id')));
     $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
     self::assertSame('abcdefghijklmno', $elements[0]['#embed_id']);
     self::assertSame(['mave/player'], $elements[0]['#attached']['library']);
     self::assertArrayNotHasKey('api_key', $elements[0]['#attached']['drupalSettings']['mave']);
+  }
+
+  /**
+   * Tests stored and configured themes cannot load external player modules.
+   */
+  public function testPlayerThemesAreRestricted(): void {
+    $media = Media::create([
+      'bundle' => 'mave_video',
+      'field_mave_id' => 'abcdefghijklmno',
+    ]);
+    $formatter = EntityViewDisplay::load('media.mave_video.default')->getRenderer('field_mave_id');
+    $themes = [
+      'default',
+      'dolphin',
+      'synthwave',
+      'https://example.invalid/theme.js',
+      '//example.invalid/theme.js',
+      './custom.js',
+    ];
+    foreach ($themes as $theme) {
+      $expected = in_array($theme, ['default', 'dolphin', 'synthwave'], TRUE) ? $theme : 'default';
+      $media->set('field_mave_theme', $theme);
+      $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+      self::assertSame($expected, $elements[0]['#player_theme']);
+      $html = (string) $this->container->get('renderer')->renderRoot($elements);
+      self::assertStringContainsString('theme="' . $expected . '"', $html);
+
+      // Imported display configuration must follow the same restriction.
+      $media->set('field_mave_theme', '');
+      $formatter->setSetting('theme', $theme);
+      $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+      self::assertSame($expected, $elements[0]['#player_theme']);
+
+      // Global settings also reach the JavaScript preview independently.
+      $formatter->setSetting('theme', '');
+      $this->config('mave.settings')->set('player_theme', $theme)->save();
+      $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+      self::assertSame($expected, $elements[0]['#player_theme']);
+      self::assertSame($expected, $this->container->get('mave.client')->publicSettings()['playerTheme']);
+    }
+    $this->config('mave.settings')->set('player_theme', 'dolphin')->save();
+    $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+    self::assertSame('dolphin', $elements[0]['#player_theme']);
+    $formatter->setSetting('theme', 'synthwave');
+    $elements = $formatter->viewElements($media->get('field_mave_id'), 'en');
+    self::assertSame('synthwave', $elements[0]['#player_theme']);
+  }
+
+  /**
+   * Tests existing media fields offer only the three built-in themes.
+   */
+  public function testMediaThemeWidgetUsesFixedChoices(): void {
+    foreach (['', 'dolphin', 'https://example.invalid/theme.js'] as $theme) {
+      $media = Media::create(['bundle' => 'mave_video', 'field_mave_theme' => $theme]);
+      $form = $this->container->get('entity.form_builder')->getForm($media);
+      $element = $form['field_mave_theme']['widget'][0]['value'];
+      self::assertSame('select', $element['#type']);
+      self::assertSame(1, $element['#size']);
+      self::assertSame(['default', 'dolphin', 'synthwave'], array_keys($element['#options']));
+      self::assertSame(['Default', 'Dolphin', 'Synthwave'], array_values(array_map('strval', $element['#options'])));
+      self::assertSame($theme === 'dolphin' ? 'dolphin' : 'default', $element['#default_value']);
+    }
   }
 
   /**

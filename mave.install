@@ -45,7 +45,7 @@ function mave_install(): void {
       'bundle' => 'mave_video',
       'label' => $label,
       'required' => $name === 'field_mave_id',
-      'description' => $name === 'field_mave_theme' ? 'Optional: default, dolphin or synthwave. Leave blank to inherit the default.' : ($name === 'field_mave_color' ? 'Optional color such as #635bff. Leave blank to inherit the default.' : ''),
+      'description' => $name === 'field_mave_theme' ? 'Choose default, dolphin or synthwave.' : ($name === 'field_mave_color' ? 'Optional color such as #635bff. Leave blank to inherit the default.' : ''),
     ])->save();
   }
   foreach (['default', 'media_library'] as $mode) {

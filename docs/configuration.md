@@ -10,8 +10,16 @@ For deployments, inject the key through the environment and `settings.php`:
 $settings['mave_api_key'] = getenv('MAVE_API_KEY') ?: '';
 ```
 
-This overrides the stored key and disables editing it in the form. Both a raw
-credential pair and an encoded API key are accepted. Do not commit real keys.
+This overrides the stored key and disables editing it in the form. Paste the
+complete API key created in Mave, exactly as copied. The module uses that key
+directly for API requests and upload signing, without decoding or re-encoding it.
+Do not commit real keys.
+
+The upload protocol uses the generated API credential to sign HS256 tokens.
+Tokens expire after two hours to allow large uploads and retries;
+treat them as bearer credentials and never log or share them. The upload service
+must validate their signature, destination and expiry. Changing the signing key
+in Drupal alone would make tokens incompatible with that service.
 
 ## Permissions and editing
 

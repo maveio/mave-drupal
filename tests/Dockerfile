@@ -1,6 +1,6 @@
-FROM drupal:11-apache@sha256:4249d58e94b052d5601499c7d1377433b5c9a8ad7b7b2d330368ce29181aca9c
+FROM drupal:11-apache@sha256:0e3f1001a265ccc3629a81b5889a2ecf61a0908152fbc0c772722965b7a81dae
 
-ARG DRUPAL_VERSION=11.4.9
+ARG DRUPAL_VERSION=11.4.12
 
 # Drupal 12 distribution archives omit the test framework. Source installs
 # retain it so both matrix versions use Drupal's own test bootstrap.

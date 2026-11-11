@@ -36,7 +36,7 @@ final class MavePlayer extends FormatterBase {
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
-    return ['theme' => '', 'color' => ''] + parent::defaultSettings();
+    return ['theme' => 'default', 'color' => ''] + parent::defaultSettings();
   }
 
   /**
@@ -48,12 +48,11 @@ final class MavePlayer extends FormatterBase {
       '#type' => 'select',
       '#title' => $this->t('Theme'),
       '#options' => [
-        '' => $this->t('Use Mave default'),
-        'default' => 'Default',
-        'dolphin' => 'Dolphin',
-        'synthwave' => 'Synthwave',
+        'default' => $this->t('Default'),
+        'dolphin' => $this->t('Dolphin'),
+        'synthwave' => $this->t('Synthwave'),
       ],
-      '#default_value' => $this->getSetting('theme'),
+      '#default_value' => MaveClient::playerTheme($this->getSetting('theme')),
     ];
     $elements['color'] = [
       '#type' => 'textfield',
@@ -67,7 +66,7 @@ final class MavePlayer extends FormatterBase {
    * {@inheritdoc}
    */
   public function settingsSummary(): array {
-    return [$this->t('Theme: @theme', ['@theme' => $this->getSetting('theme') ?: 'Mave default'])];
+    return [$this->t('Theme: @theme', ['@theme' => MaveClient::playerTheme($this->getSetting('theme'))])];
   }
 
   /**
@@ -86,7 +85,7 @@ final class MavePlayer extends FormatterBase {
       $elements[$delta] = [
         '#theme' => 'mave_player',
         '#embed_id' => $item->value,
-        '#player_theme' => $theme,
+        '#player_theme' => MaveClient::playerTheme($theme),
         '#color' => $color,
         '#attached' => ['library' => ['mave/player'], 'drupalSettings' => ['mave' => $this->client->publicSettings()]],
         '#cache' => ['tags' => ['config:mave.settings']],
